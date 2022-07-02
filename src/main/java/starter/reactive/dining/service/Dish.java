@@ -9,19 +9,20 @@ import lombok.ToString;
  */
 
 @Getter
-@ToString(exclude = "isDelivered")
+@ToString(exclude = "delivered")
 public class Dish {
-    private final String name;
+    private final String description;
 
-    private boolean isDelivered;
+    private boolean delivered;
 
-    public Dish(String name) {
-        this.name = name;
-        this.isDelivered = false;
+    public Dish(String description) {
+        this.description = description;
+        this.delivered = false;
     }
 
-    Dish deliver() {
-        this.isDelivered = true;
-        return this;
+    public static Dish deliver(Dish dish) {
+        Dish deliveredDish = new Dish(dish.description);
+        deliveredDish.delivered = true;
+        return deliveredDish;
     }
 }

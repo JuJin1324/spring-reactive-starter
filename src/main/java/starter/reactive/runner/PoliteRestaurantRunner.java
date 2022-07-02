@@ -11,7 +11,7 @@ import starter.reactive.dining.service.PoliteServer;
  * Created Date : 2022/07/02
  */
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class PoliteRestaurantRunner implements ApplicationRunner {
     private final PoliteServer server;
