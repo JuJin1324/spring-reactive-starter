@@ -1,1 +1,21 @@
+spring:
+  profiles:
+    active: local
+  mongodb:
+    embedded:
+      version: 3.5.5
+  webflux:
+    hiddenmethod:
+      filter:
+        enabled: true
+---
+spring:
+  config:
+    activate:
+      on-profile: local
 
+logging:
+  level:
+    root: info
+    org.springframework.web: debug
+    org.springframework.data.mongodb.core.ReactiveMongoTemplate: debug

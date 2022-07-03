@@ -8,13 +8,50 @@
     <title>Spring Reactive Starter</title>
 </head>
 <body>
-<h1>Welcom to Spring Reactive Starter!</h1>
+<h2>Inventory Management</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${items}">
+        <td th:text="${item.itemId}"></td>
+        <td th:text="${item.name}"></td>
+        <td th:text="${item.price}"></td>
+        <td>
+            <form method="post" th:action="@{'/add/' + ${item.itemId}}">
+                <input type="submit" value="Add to Cart" />
+            </form>
+        </td>
+        <td>
+            <form th:method="delete" th:action="@{'/delete/' + ${item.itemId}}">
+                <input type="submit" value="Delete" />
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
-<p>
-    Over the span of this book, you'll
-    어쩌고 저쩌고
-    이러쿵 저러쿵
-    블라블라블라
-</p>
+<h2>My Cart</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Quantity</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="cartItem : ${cart.cartItems}">
+        <td th:text="${cartItem.itemId}"></td>
+        <td th:text="${cartItem.name}"></td>
+        <td th:text="${cartItem.quantity}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

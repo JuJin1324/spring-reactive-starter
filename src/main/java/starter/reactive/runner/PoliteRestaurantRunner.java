@@ -3,8 +3,7 @@ package starter.reactive.runner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
-import starter.reactive.dining.service.PoliteServer;
+import starter.reactive.domain.dining.service.PoliteServer;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)

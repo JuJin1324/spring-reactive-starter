@@ -5,8 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import starter.reactive.dining.service.Dish;
-import starter.reactive.dining.service.KitchenService;
+import starter.reactive.domain.dining.service.Dish;
+import starter.reactive.domain.dining.service.KitchenService;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)

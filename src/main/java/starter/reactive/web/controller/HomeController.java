@@ -3,7 +3,13 @@ package starter.reactive.web.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.reactive.result.view.Rendering;
 import reactor.core.publisher.Mono;
+import starter.reactive.domain.ecommerce.dto.CartReadDto;
+import starter.reactive.domain.ecommerce.service.CartService;
+import starter.reactive.domain.ecommerce.service.ItemService;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -13,15 +19,22 @@ import reactor.core.publisher.Mono;
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
+    private final ItemService itemService;
+    private final CartService cartService;
 
-    /**
-     * 단순히 template 이름을 반환하는 Controller 의 경우
-     * 굳이 Mono<String> 을 반환하지 않고 String 을 반환해도 된다.
-     * 여기서 Mono<String> 반환한 것은 학습용이다.
-     */
     @GetMapping
-    Mono<String> home() {
-        return Mono.just("home");
+    public Mono<Rendering> home() {
+        return Mono.just(Rendering.view("home")
+                .modelAttribute("items", itemService.getAllItems())
+                .modelAttribute("cart", cartService.getCarts("My Cart")
+                        .defaultIfEmpty(new CartReadDto("My Cart")))
+                .build()
+        );
     }
 
+    @PostMapping("/add/{itemId}")
+    public Mono<String> addToCart(@PathVariable("itemId") String itemId) {
+        return cartService.addToCart("My Cart", itemId)
+                .thenReturn("redirect:/");
+    }
 }

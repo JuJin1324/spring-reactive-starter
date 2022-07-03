@@ -1,4 +1,4 @@
-package starter.reactive.dining.service;
+package starter.reactive.domain.dining.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
