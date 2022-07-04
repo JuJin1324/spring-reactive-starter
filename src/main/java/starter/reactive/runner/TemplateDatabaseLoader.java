@@ -19,7 +19,7 @@ public class TemplateDatabaseLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        mongoOperations.save(new Item("Alf alarm clock", 19.99));
-        mongoOperations.save(new Item("Smurf TV tray", 24.99));
+        mongoOperations.save(new Item("Alf alarm clock", "description1", 19.99));
+        mongoOperations.save(new Item("Smurf TV tray", "description2", 24.99));
     }
 }

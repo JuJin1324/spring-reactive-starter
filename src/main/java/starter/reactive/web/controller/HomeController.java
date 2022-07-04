@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.result.view.Rendering;
 import reactor.core.publisher.Mono;
 import starter.reactive.domain.ecommerce.dto.CartReadDto;
@@ -36,5 +37,18 @@ public class HomeController {
     public Mono<String> addToCart(@PathVariable("itemId") String itemId) {
         return cartService.addToCart("My Cart", itemId)
                 .thenReturn("redirect:/");
+    }
+
+    @GetMapping("/search")
+    Mono<Rendering> search(@RequestParam(required = false) String name,
+                           @RequestParam(required = false) String description,
+                           @RequestParam boolean useAnd) {
+        return Mono.just(
+                Rendering.view("home")
+                        .modelAttribute("items", itemService.search(name, description, useAnd))
+                        .modelAttribute("cart", cartService.getCarts("My Cart"))
+                        .build()
+        );
+
     }
 }

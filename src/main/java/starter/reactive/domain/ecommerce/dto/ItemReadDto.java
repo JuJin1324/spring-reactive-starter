@@ -12,11 +12,13 @@ import starter.reactive.domain.ecommerce.entity.Item;
 public class ItemReadDto {
     private final String itemId;
     private final String name;
+    private final String description;
     private final double price;
 
     public ItemReadDto(Item item) {
         this.itemId = item.getId();
         this.name = item.getName();
+        this.description = item.getDescription();
         this.price = item.getPrice();
     }
 }
