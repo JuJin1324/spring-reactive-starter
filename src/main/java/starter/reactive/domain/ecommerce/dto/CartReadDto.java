@@ -1,6 +1,7 @@
 package starter.reactive.domain.ecommerce.dto;
 
 import lombok.Getter;
+import lombok.ToString;
 import starter.reactive.domain.ecommerce.entity.Cart;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
  */
 
 @Getter
+@ToString
 public class CartReadDto {
     private final String                cartId;
     private       List<CartItemReadDto> cartItems;
