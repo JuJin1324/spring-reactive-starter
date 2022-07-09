@@ -32,10 +32,19 @@
 > 설명: Reactive stream driver 를 사용하는 몽고DB 라이브러리  
 > build.gradle: `implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'`  
 
+### Actuator
+> 설명:   
+> build.gradle: `implementation 'org.springframework.boot:spring-boot-starter-actuator'`
+
 ## Run
-### Gradle 
+### 빌드 및 실행
+> Gradle
 > 애플리케이션 빌드: `./gradlew build`  
 > 애플리케이션 실행: `./gradlew bootRun`  
+>
+> Maven
+> 애플리케이션 빌드: `./mvnw build`  
+> 애플리케이션 실행: `./mvnw spring-boot:run` 
 
 ## Debug
 ### Hooks
@@ -49,12 +58,11 @@
 > 주의) 리액터가 스레드별 스택 세부정보를 스레드 경계를 넘어서 전달하는 과정에는 굉장히 많은 비용이 든다. 이런 비용 이슈 때문에 자바에서 스레드 경계를 넘어 정보를
 > 전달하는 것을 기본적으로 허용하지 않는 이유일 것이다. 따라서 성능 문제를 일으킬 수 있으므로 실제 운영환경 또는 실제 벤치마크에서는 `Hooks.onOperatorDebug();`를 
 > 호출해서는 안된다.
->
 
 ## Test
 ### BlockHound JUnit
 > BlockHound Hook 을 JUnit Test 에서 사용하기 위해서 build.gradle 에 다음을 추가한다.
-> ```
+> ```groovy
 > testImplementation 'io.projectreactor.tools:blockhound-junit-platform:1.0.6.RELEASE'
 > testRuntimeOnly(
 >         'org.junit.jupiter:junit-jupiter-engine',
@@ -64,4 +72,48 @@
 > )
 > ```
 
+## Deploy
+### 실행가능한 Jar 파일 생성
+> Gradle 
+> 현재 프로젝트의 경로 이동 후 `./gradlew clean bootJar` 를 실행한다.  
+> 이후 현재 프로젝트의 경로 기준 build/libs 디렉터리 아래 생성된 `.jar` 파일로 배포한다.   
+>
+> Maven  
+> 현재 프로젝트의 경로 이동 후 `./mvnw clean package` 를 실행한다.
+> 이후 현재 프로젝트의 경로 기준 target 디렉터리 아래 생성된 `.jar` 파일로 배포한다.
+
+### Docker
+> 현재 프로젝트의 docker/Dokerfile 을 참조한다.   
+> Docker 는 캐시 시스템을 가지고 있어서 컨테이너 빌드에 소요되는 시간을 줄이기 위해 계층화를 이용한다.
+> 애플리케이션 역시 계층화하여 Docker 의 캐시 시스템을 적극 활용한다. 
+> 참고로 Dockerfile 을 테스트 시에 주의 점이 있다. 현재 프로젝트에서 Dockerfile 이 docker 디렉터리 안에 존재한다.
+> Dockerfile 은 Dockerfile 이 존재하는 디렉터리 바깥의 파일은 COPY 명령어로 접근할 수 없다. 그래서 Dockerfile 로 
+> target/*.jar 혹은 build/libs/*.jar 를 실습하기 위해서는 해당 .jar 파일을 docker 디렉터리 내부로 가져온 후에 
+> `ARG JAR_FILE=*.jar` 로 수정하여 실습한다.
+
+### 애플리케이션 배포 파일 계층화
+> Gradle  
+> ```groovy
+> bootJar {
+>     layered
+> }
+> ```
+> Maven  
+> ```xml
+> <plugin>
+>   <groupId>org.springframework.boot</groupId>
+>   <artifactId>spring-boot-maven-plugin</artifactId>
+>   <configuration>
+>       <layers>
+>           <enabled>true</enabled>
+>       </layers>
+>   </configuration>
+> </plugin>
+> ```
+
+### SpringBoot 에서 Docker 이미지 빌드
+> 스프링 부트는 Dockerfile 없이도 도커 컨테이너 이미지를 빌드할 수 있는 기능을 제공한다.  
+> Gradle: `./gradlew bootBuildImage`
+> 
+> Maven: `./mvnw spring-boot:build-image`
 
