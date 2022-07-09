@@ -33,7 +33,7 @@ class CartServiceTest {
     @Mock
     private CartRepository cartRepository;
 
-    private CartService cartService;
+    private ReactiveCartService cartService;
 
     @BeforeEach
     void setUp() {
@@ -47,7 +47,7 @@ class CartServiceTest {
         given(itemRepository.findById(anyString())).willReturn(Mono.just(item));
         given(cartRepository.save(any())).willReturn(Mono.just(cart));
 
-        cartService = new CartService(cartRepository, itemRepository);
+        cartService = new ReactiveCartService(cartRepository, itemRepository);
     }
 
     @Test

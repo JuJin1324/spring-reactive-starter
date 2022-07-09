@@ -11,8 +11,8 @@ import starter.reactive.domain.ecommerce.dto.CartReadDto;
 import starter.reactive.domain.ecommerce.dto.ItemReadDto;
 import starter.reactive.domain.ecommerce.entity.Cart;
 import starter.reactive.domain.ecommerce.entity.Item;
-import starter.reactive.domain.ecommerce.service.CartService;
-import starter.reactive.domain.ecommerce.service.ItemService;
+import starter.reactive.domain.ecommerce.service.ReactiveCartService;
+import starter.reactive.domain.ecommerce.service.ReactiveItemService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -28,9 +28,9 @@ public class HomeControllerSliceTest {
     private WebTestClient webTestClient;
 
     @MockBean
-    private ItemService itemService;
+    private ReactiveItemService itemService;
     @MockBean
-    private CartService cartService;
+    private ReactiveCartService cartService;
 
     @Test
     void homePage() {

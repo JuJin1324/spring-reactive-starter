@@ -43,8 +43,25 @@
 > 리액터 프로젝트에서 리액트 플로우 연산(map().flatmap().map() 과 같은 이어진 연산)이 모두 동일한 스레드에서 수행된다는 보장이 없다.  
 > 리액터 프로젝트에서 자바의 스택 트레이스를 사용하게 되면 스레드 경계를 넘어선 StackTrace 에러 메시지를 표시할 수 없다.  
 > 
+> build.gradle 에 추가: `implementation 'io.projectreactor.tools:blockhound:1.0.6.RELEASE'`
 > 리액터 연산 시작 전에 맨 위에 `Hooks.onOperatorDebug();` 명령어를 추가하면 명령어 이후의 연산에서 스레드를 넘어선 스택 트레이스가 표시된다.  
 > 
 > 주의) 리액터가 스레드별 스택 세부정보를 스레드 경계를 넘어서 전달하는 과정에는 굉장히 많은 비용이 든다. 이런 비용 이슈 때문에 자바에서 스레드 경계를 넘어 정보를
 > 전달하는 것을 기본적으로 허용하지 않는 이유일 것이다. 따라서 성능 문제를 일으킬 수 있으므로 실제 운영환경 또는 실제 벤치마크에서는 `Hooks.onOperatorDebug();`를 
 > 호출해서는 안된다.
+>
+
+## Test
+### BlockHound JUnit
+> BlockHound Hook 을 JUnit Test 에서 사용하기 위해서 build.gradle 에 다음을 추가한다.
+> ```
+> testImplementation 'io.projectreactor.tools:blockhound-junit-platform:1.0.6.RELEASE'
+> testRuntimeOnly(
+>         'org.junit.jupiter:junit-jupiter-engine',
+>         'org.junit.vintage:junit-vintage-engine',
+>         'org.junit.platform:junit-platform-launcher',
+>         'org.junit.platform:junit-platform-runner'
+> )
+> ```
+
+
