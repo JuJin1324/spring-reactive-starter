@@ -1,4 +1,6 @@
 # spring.reactive.starter
+## JDK
+> version: amazon corretto 11
 
 ## Spring Webflux 실행 구조
 > Spring Webflux 는 내부적으로 Reactor Netty 를 사용하고 Reactor Netty 는 실행 시 디폴트로 

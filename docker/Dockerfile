@@ -1,3 +1,4 @@
+## amazoncorretto: amazon's openJDK
 FROM amazoncorretto:11 as builder
 WORKDIR application
 ARG JAR_FILE=libs/*.jar
