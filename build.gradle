@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id "com.gorylenko.gradle-git-properties" version '2.2.3'
 }
 
 group = 'starter'
@@ -46,4 +47,10 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+processResources {
+    filesMatching("**/application.yml") {
+        expand(project.properties)
+    }
 }

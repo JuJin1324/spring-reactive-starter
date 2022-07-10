@@ -119,3 +119,92 @@
 > 
 > Maven: `./mvnw spring-boot:build-image`
 
+## Actuator
+### dependency
+> build.gradle 에 다음 추가 `implementation 'org.springframework.boot:spring-boot-starter-actuator'`
+
+### health
+> 설명: 애플리케이션 헬스 체크  
+> URL: `GET localhost:8080/actuator/health`   
+> 디폴트 리턴 정보: `{"status":"UP"}`  
+> 
+> 추가 정보 표시 설정   
+> application.yml
+> ```yaml
+> management:
+>     endpoint:
+>         health:
+>             show-details: always
+> ```
+> 
+
+### info
+> 설명: 사용자 지정 커스텀 정보(애플리케이션 버전 정보 및 git 버전 정보 등) 표시      
+> URL: `GET localhost:8080/actuator/info`  
+> 주의: SpringBoot 2.5.0 이후 버전부터는 application.yml 에 info endpoint 사용 설정해야함.  
+> 
+> application.yml
+> ```yaml
+> management:
+>     endpoints:
+>         web:
+>             exposure:
+>                 include: health,info
+> ```
+> 
+> 사용자 커스텀 정보 지정  
+> application.yml  
+> ```yaml
+> management:
+>     info:
+>         env:
+>             enabled: true
+> ```
+> 
+> Gradle  
+> build.gradle
+> ```groovy
+> ...
+> dependencies {
+>     ...
+> }
+> 
+> processResources {
+>    filesMatching("**/application.yml") {
+>        expand(project.properties)
+>    }
+> }
+> ```
+> 
+> application.yml
+> ```yaml
+> info:
+>     project.version: '${version}'
+>     java.version: '${sourceCompatibility}'
+> ```
+> 
+> Maven  
+> ```yaml
+> info:
+>     project.version: '@project.version@'
+>     java.version: '@java.version@' 
+> ```
+
+### info - git 버전 정보 표시
+> Gradle  
+> build.gradle
+> ```groovy
+> plugins {
+>     ...
+>     id "com.gorylenko.gradle-git-properties" version '2.2.3'
+> }
+> ```
+>
+> Maven
+> pom.xml
+> ```xml
+> <plugin>
+>   <groupId>pl.project13.maven</groupId>
+>   <artifactId>git-commit-id-plugin</artifactId>
+> </plugin>
+> ```
