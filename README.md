@@ -208,3 +208,21 @@
 >   <artifactId>git-commit-id-plugin</artifactId>
 > </plugin>
 > ```
+
+## Reactor map vs flatMap
+### map
+> Mono / Flux 에서 map 을 사용하게 되면 동기(synchronous)로 처리한다.   
+> `Mono<T> -> Mono<T>` 의 경우 비동기로 처리하는 의미가 없기 때문에 굳이 flatMap 을 사용하지 않고 map 을 사용한다.
+
+### flatMap
+> Mono / Flux 에서 flatMap 을 사용하게 되면 비동기(asynchronous)로 처리한다.  
+> `Flux<T> -> Flux<T>`, `Flux<T> -> Flux<U>` 의 경우 성능 상 이점이 많기 때문에 map 을 쓰지 않고 flatMap 을 사용한다. 
+> `Mono<T> -> Flux<U>` 의 경우 비동기로 병렬 동작하는 publisher를 사용하는 경우 동기 실행보다 빠른 처리가 가능해진다. 
+> 
+> `Mono<T> -> Mono<U>`의 flatMap의 경우 성능 상 이점이 아닌 Publisher 객체 타입 변환이 목적이기 때문에 flatMap을 사용한다.
+> 성능 상 이점이 없음으로 `Mono<T> -> Mono<U>` 의 경우 map 을 사용해도 된다.
+> 
+> 정리하면 Mono -> Mono 의 경우 map 을 사용해도 무관하며, Flux -> Flux 의 경우 필히 flatMap 을 사용한다.
+
+### 참조사이트
+> [Reactor map, flatMap method는 언제 써야할까?](https://luvstudy.tistory.com/95)  
