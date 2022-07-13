@@ -8,5 +8,21 @@ endif::[]
 include::{snippets}/findAll/http-request.adoc[]
 ==== Response
 include::{snippets}/findAll/http-response.adoc[]
-==== Fields
+==== Response Fields
 include::{snippets}/findAll/response-fields.adoc[]
+==== Test - curl
+include::{snippets}/findAll/curl-request.adoc[]
+==== Test - httpie
+include::{snippets}/findAll/httpie-request.adoc[]
+
+=== 신규 생성
+==== Request
+include::{snippets}/addNewItem/http-request.adoc[]
+==== Response
+include::{snippets}/addNewItem/http-response.adoc[]
+==== Request Fields
+include::{snippets}/addNewItem/request-fields.adoc[]
+==== Test - curl
+include::{snippets}/addNewItem/curl-request.adoc[]
+==== Test - httpie
+include::{snippets}/addNewItem/httpie-request.adoc[]
