@@ -2,6 +2,7 @@ package starter.reactive.domain.ecommerce.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -10,6 +11,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
+@ToString
 public class ItemCreateDto {
     private final String name;
     private final String description;
