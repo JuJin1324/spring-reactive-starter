@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id "com.gorylenko.gradle-git-properties" version '2.2.3'
+    id "org.asciidoctor.jvm.convert" version '3.3.2'
 }
 
 group = 'starter'
@@ -21,6 +22,18 @@ repositories {
 
 bootJar {
     layered
+    dependsOn asciidoctor
+    copy {
+        from '${asciidoctor.outputDir}'
+        into 'BOOT-INF/classes/static/docs'
+    }
+    finalizedBy 'copyDocument'
+}
+
+task copyDocument(type: Copy) {
+    dependsOn bootJar
+    from file("src/docs/asciidoc")
+    into file("src/main/resources/static/docs")
 }
 
 dependencies {
@@ -37,6 +50,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'io.projectreactor.tools:blockhound-junit-platform:1.0.6.RELEASE'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
     testRuntimeOnly(
             'org.junit.jupiter:junit-jupiter-engine',
             'org.junit.vintage:junit-vintage-engine',
@@ -47,6 +61,20 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+    outputs.dir snippetsDir
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
 }
 
 processResources {

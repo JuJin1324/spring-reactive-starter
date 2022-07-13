@@ -226,3 +226,83 @@
 
 ### 참조사이트
 > [Reactor map, flatMap method는 언제 써야할까?](https://luvstudy.tistory.com/95)  
+
+## Spring REST Doc
+### Asciidoctor
+> API 문서화 도구
+
+### Asciidoctor - Gradle
+> snippet 인 adoc 파일 생성을 위해서 다음을 추가한다.
+> build.gradle
+> ```groovy
+> plugins {
+>   ...
+>   id "org.asciidoctor.jvm.convert" version '3.3.2'
+> }
+> 
+> dependencies {
+>   ...
+>   // WebTestClient 로 테스트 하는 경우는 다음을 추가한다.
+>   testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
+>   // MockMvc 로 테스트 하는 경우는 다음을 추가한다.
+>   testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc' 
+> }
+> 
+> tasks.named('test') {
+>     outputs.dir snippetsDir
+>     useJUnitPlatform()
+> }
+> 
+> ext {
+>   snippetsDir = file('build/generated-snippets')
+> }
+> 
+> asciidoctor {
+>   inputs.dir snippetsDir
+>   dependsOn test
+> }
+> asciidoctor.doFirst {
+>     delete file('src/main/resources/static/docs')
+> }
+> ```
+> 
+> snippet 파일인 .adoc 파일을 통해서 전체 API HTML 문서를 생성하기 위해서는 다음을 추가한다.  
+> build.gradle
+> ```groovy
+> bootJar {
+>   dependsOn asciidoctor
+>   copy {
+>       from '${asciidoctor.outputDir}'
+>       into 'BOOT-INF/classes/statis/docs'
+>   }
+>   finalizedBy 'copyDocument'
+> }
+> 
+> task copyDocument(type: Copy) {
+>     dependsOn bootJar
+>     from file("src/docs/asciidoc")
+>     into file("src/main/resources/static/docs")
+> }
+> ```
+> 
+> src 아래에 docs/asciidoc 디렉터리를 생성 후 API HTML 을 생성하도록 템플릿을 작성한다.
+> src/docs/asciidoce/api.adoc
+> ```
+> ifndef::snippets[]
+> :snippets: ./build/generated-snippets
+> endif::[]
+> 
+> == Item
+> === 전체 조회
+> ==== Request
+> include::{snippets}/findAll/http-request.adoc[]
+> ==== Response
+> include::{snippets}/findAll/http-response.adoc[]
+> ==== Fields
+> include::{snippets}/findAll/response-fields.adoc[]
+> ```
+> 
+> 참조사이트: [Spring REST Docs 적용 (Gradle 7)](https://xlffm3.github.io/spring%20&%20spring%20boot/rest-docs/)
+
+### Asciidoctor - Maven
+> 참조사이트: [Maven + MockMvc 환경에서 Spring Rest Docs 써보기](https://berrrrr.github.io/programming/2021/01/24/how-to-use-spring-rest-docs/)  

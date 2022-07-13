@@ -36,3 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 /docker/libs/
+/src/main/resources/static/docs/api.adoc

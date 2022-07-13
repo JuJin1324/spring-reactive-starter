@@ -1,0 +1,12 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== Item
+=== 전체 조회
+==== Request
+include::{snippets}/findAll/http-request.adoc[]
+==== Response
+include::{snippets}/findAll/http-response.adoc[]
+==== Fields
+include::{snippets}/findAll/response-fields.adoc[]

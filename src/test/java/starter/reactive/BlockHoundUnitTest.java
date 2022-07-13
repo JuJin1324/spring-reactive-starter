@@ -40,18 +40,6 @@ public class BlockHoundUnitTest {
 
     @BeforeEach
     void setUp() {
-        Item sampleItem = new Item("item1", "TV tray", "Alf TV tray", 19.99);
-        CartItem sampleCartItem = new CartItem(sampleItem);
-        Cart sampleCart = new Cart("My Cart", Collections.singletonList(sampleCartItem));
-
-        /* stubbing */
-        given(cartRepository.findById(anyString()))
-                .willReturn(Mono.<Cart> empty().hide());
-//        given(itemRepository.findById(anyString()))
-//                .willReturn(Mono.just(sampleItem));
-//        given(cartRepository.save(any()))
-//                .willReturn(Mono.just(sampleCart));
-
         cartService = new BlockingCartService(cartRepository, itemRepository);
     }
 
@@ -76,6 +64,18 @@ public class BlockHoundUnitTest {
 
     @Test
     void blockHoundShouldTrapBlockingCall() {
+//        Item sampleItem = new Item("item1", "TV tray", "Alf TV tray", 19.99);
+//        CartItem sampleCartItem = new CartItem(sampleItem);
+//        Cart sampleCart = new Cart("My Cart", Collections.singletonList(sampleCartItem));
+
+        /* stubbing */
+        given(cartRepository.findById(anyString()))
+                .willReturn(Mono.<Cart> empty().hide());
+//        given(itemRepository.findById(anyString()))
+//                .willReturn(Mono.just(sampleItem));
+//        given(cartRepository.save(any()))
+//                .willReturn(Mono.just(sampleCart));
+
         Mono.delay(Duration.ofSeconds(1))
                 .flatMap(tick -> cartService.addItemToCart("My Cart", "item1"))
                 .as(StepVerifier::create)
