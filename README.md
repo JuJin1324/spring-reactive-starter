@@ -306,3 +306,19 @@
 
 ### Asciidoctor - Maven
 > 참조사이트: [Maven + MockMvc 환경에서 Spring Rest Docs 써보기](https://berrrrr.github.io/programming/2021/01/24/how-to-use-spring-rest-docs/)  
+
+## RabbitMQ 메시징 테스트
+### TestContainers
+> RabbitMQ 를 직접 설치하지 않고 도커 컨테이너를 이용해서 테스트 용도로 설치했다가 테스트가 완료되면 자동으로 제거될 수 있도록 해주는 라이브러리  
+>
+> Gradle  
+> build.gradle
+> ```groovy
+> dependencies {
+>   implementation 'org.springframework.boot:spring-boot-starter-amqp'  // SpringBoot RabbitMQ 라이브러리 
+>   ...
+>   implementation platform('org.testcontainers:testcontainers-bom:1.17.3') //import bom
+>   testImplementation 'org.testcontainers:junit-jupiter'
+>   testImplementation 'org.testcontainers:rabbitmq'    // TestContainer 로 다른 컨테이너가 필요하면 얘만 교체하면 된다.
+> }
+> ```
