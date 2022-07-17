@@ -35,6 +35,8 @@ spring:
 logging:
   level:
     root: info
-    web: debug
-    reactor.netty: debug
-    org.springframework.data.mongodb.core.ReactiveMongoTemplate: debug
+    web: info
+    reactor: debug
+    org.springframework.data: debug
+    org.springframework.messaging: debug
+    org.springframework.amqp: debug

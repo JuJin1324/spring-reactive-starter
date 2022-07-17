@@ -45,7 +45,7 @@ public class RabbitTest {
 
     @Test
     void verifyMessagingThroughAmqp() throws InterruptedException {
-        webTestClient.post().uri("/items")
+        webTestClient.post().uri("/amqp/items")
                 .bodyValue(new ItemCreateDto("Alf alarm clock", "nothing important", 19.99))
                 .exchange()
                 .expectStatus().isCreated()
@@ -53,7 +53,7 @@ public class RabbitTest {
 
         Thread.sleep(1500L);
 
-        webTestClient.post().uri("/items")
+        webTestClient.post().uri("/amqp/items")
                 .bodyValue(new ItemCreateDto("Smurf TV tray", "nothing important", 29.99))
                 .exchange()
                 .expectStatus().isCreated()
