@@ -266,6 +266,18 @@
 > ex) `Mono<Item> callable = Mono.fromCallable(() -> ItemService.getOne("item-1"));`  
 > defer 와 마찬가지로 구독이 발생해야 안의 내용이 실행된다.(lazy)
 
+### boundedElastic + fromCallable
+> Schedulers.boundedElastic() + fromCallable() 을 사용하여 fromCallable 안에 블로킹 코드를 넣어두는 방식으로
+> 블로킹 코드를 논블로킹하게 구현할 수 있다.  
+> ex)
+> ```java
+> Mono
+>   .subscribeOn(Schedulers.boundedElastic())
+>   .fromCallable(() -> {
+>       return ...
+>   });
+> ```
+
 ### 참조사이트
 > [Reactor just, defer, fromCallable 에 대하여](https://binux.tistory.com/135?category=907689)
 
