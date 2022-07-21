@@ -9,6 +9,8 @@ import starter.reactive.domain.ecommerce.entity.CartItem;
 import starter.reactive.domain.ecommerce.repository.CartRepository;
 import starter.reactive.domain.ecommerce.repository.ItemRepository;
 
+import java.util.stream.Collectors;
+
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
  * Created Date : 2022/07/03
@@ -53,5 +55,24 @@ public class ReactiveCartService implements CartService {
                 .log("savedCart")
                 .map(CartReadDto::new);
 
+    }
+
+    @Override
+    public Mono<CartReadDto> deleteOneFromCart(String cartId, String itemId) {
+        return cartRepository.findById(cartId)
+                .defaultIfEmpty(new Cart(cartId))
+                .flatMap(cart -> cart.getCartItems().stream()
+                        .filter(cartItem -> cartItem.getItem().getId().equals(itemId))
+                        .findAny()
+                        .map(cartItem -> {
+                            cartItem.decrement();
+                            return Mono.just(cart);
+                        })
+                        .orElse(Mono.empty()))
+                .map(cart -> new Cart(cart.getId(), cart.getCartItems().stream()
+                        .filter(cartItem -> cartItem.getQuantity() > 0)
+                        .collect(Collectors.toList())))
+                .flatMap(cartRepository::save)
+                .map(CartReadDto::new);
     }
 }

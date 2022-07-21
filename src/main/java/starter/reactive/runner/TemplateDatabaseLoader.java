@@ -12,7 +12,7 @@ import starter.reactive.domain.ecommerce.entity.Item;
  * Created Date : 2022/07/03
  */
 
-//@Component
+@Component
 @RequiredArgsConstructor
 public class TemplateDatabaseLoader implements ApplicationRunner {
     private final MongoOperations mongoOperations;

@@ -1,7 +1,5 @@
 package starter.reactive;
 
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
 import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
@@ -25,8 +23,8 @@ public class SpringReactiveStarterApplication {
         return new InMemoryHttpTraceRepository();
     }
 
-    @Bean
-    Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
+//    @Bean
+//    Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
+//        return new Jackson2JsonMessageConverter();
+//    }
 }

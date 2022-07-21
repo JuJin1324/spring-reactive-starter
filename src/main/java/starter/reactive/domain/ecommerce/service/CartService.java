@@ -11,4 +11,6 @@ public interface CartService {
     Mono<CartReadDto> getCarts(String cartId);
 
     Mono<CartReadDto> addItemToCart(String cartId, String itemId);
+
+    Mono<CartReadDto> deleteOneFromCart(String cartName, String itemId);
 }

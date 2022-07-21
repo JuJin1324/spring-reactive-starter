@@ -406,3 +406,12 @@
 >     org.springframework.data: debug
 >     reactor: debug
 > ```
+
+## 스프링 시큐리티
+### dependencies
+> build.gradle
+> ```groovy
+> implementation 'org.springframework.boot:spring-boot-starter-security'
+> testImplementation 'org.springframework.security:spring-security-test'
+> ```
+

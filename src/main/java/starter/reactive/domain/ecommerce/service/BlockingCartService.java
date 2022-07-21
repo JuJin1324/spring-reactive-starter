@@ -44,4 +44,9 @@ public class BlockingCartService implements CartService {
                 .flatMap(this.cartRepository::save)
                 .map(CartReadDto::new);
     }
+
+    @Override
+    public Mono<CartReadDto> deleteOneFromCart(String cartName, String itemId) {
+        return null;
+    }
 }
