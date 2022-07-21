@@ -61,4 +61,9 @@ public class ReactiveItemService implements ItemService {
                 .flatMap(dto -> itemRepository.save(new Item(itemId, dto.getName(), dto.getDescription(), dto.getPrice())))
                 .map(ItemReadDto::new);
     }
+
+    @Override
+    public Mono<Void> delete(String itemId) {
+        return itemRepository.deleteById(itemId);
+    }
 }

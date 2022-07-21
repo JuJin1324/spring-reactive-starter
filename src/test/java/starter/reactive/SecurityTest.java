@@ -28,7 +28,9 @@ public class SecurityTest {
     @Test
     @WithMockUser(username = "alice", roles = {"SOME_OTHER_ROLE"})
     void addingInventoryWithoutProperRoleFails() {
-        webTestClient.post().uri("/")
+        webTestClient.post().uri("/api/items")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue("{\"name\": \"iPhone13 Pro\", \"description\": \"upgrade\", \"price\":999.99}")
                 .exchange()
                 .expectStatus().isForbidden();
     }

@@ -20,4 +20,6 @@ public interface ItemService {
     Mono<ItemReadDto> save(Mono<ItemCreateDto> createDto);
 
     Mono<ItemReadDto> update(String itemId, Mono<ItemUpdateDto> updateDto);
+
+    Mono<Void> delete(String itemId);
 }
