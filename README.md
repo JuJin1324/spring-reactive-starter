@@ -278,6 +278,14 @@
 >   });
 > ```
 
+## doOnNext vs map
+### doOnNext
+> 한 개의 시퀀스가 전달 될 때마다 doOnNext 이벤트 발생, map 이 아님으로 return 하지 않으며 return 하지 않더라도 매개변수로 들어온 값을 그대로
+> 방출한다.
+
+### map
+> 매개변수를 다른 타입으로 변환하여 방출한다. 방출할 타입의 변수를 return 한다.
+
 ### 참조사이트
 > [Reactor just, defer, fromCallable 에 대하여](https://binux.tistory.com/135?category=907689)
 
