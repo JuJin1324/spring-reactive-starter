@@ -1,7 +1,10 @@
 package starter.reactive.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
@@ -22,31 +25,35 @@ public class HomeController {
     private final CartService cartService;
 
     @GetMapping
-    public Mono<Rendering> home(Authentication authentication) {
+    public Mono<Rendering> home(@RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient authorizedClient,
+                                @AuthenticationPrincipal OAuth2User oAuth2User) {
         return Mono.just(Rendering.view("home")
                 .modelAttribute("items", itemService.getAllItems())
-                .modelAttribute("cart", cartService.getCarts(cartName(authentication))
-                        .defaultIfEmpty(new CartReadDto(cartName(authentication))))
-                .modelAttribute("authentication", authentication)
+                .modelAttribute("cart", cartService.getCarts(cartName(oAuth2User))
+                        .defaultIfEmpty(new CartReadDto(cartName(oAuth2User))))
+                .modelAttribute("userName", oAuth2User.getName())
+                .modelAttribute("authorities", oAuth2User.getAuthorities())
+                .modelAttribute("clientName", authorizedClient.getClientRegistration().getClientName())
+                .modelAttribute("userAttributes", oAuth2User.getAttributes())
                 .build()
         );
     }
 
-    private static String cartName(Authentication authentication) {
-        return authentication.getName() + "'s Cart";
+    private static String cartName(OAuth2User oAuth2User) {
+        return oAuth2User.getName() + "'s Cart";
     }
 
     @PostMapping("/add/{itemId}")
-    public Mono<String> addToCart(Authentication authentication,
+    public Mono<String> addToCart(@AuthenticationPrincipal OAuth2User oAuth2User,
                                   @PathVariable("itemId") String itemId) {
-        return cartService.addItemToCart(cartName(authentication), itemId)
+        return cartService.addItemToCart(cartName(oAuth2User), itemId)
                 .thenReturn("redirect:/");
     }
 
     @DeleteMapping("/delete/{itemId}")
-    public Mono<String> deleteFromCart(Authentication authentication,
+    public Mono<String> deleteFromCart(@AuthenticationPrincipal OAuth2User oAuth2User,
                                        @PathVariable("itemId") String itemId) {
-        return cartService.deleteOneFromCart(cartName(authentication), itemId)
+        return cartService.deleteOneFromCart(cartName(oAuth2User), itemId)
                 .thenReturn("redirect:/");
     }
 

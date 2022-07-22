@@ -35,7 +35,7 @@ public class SecurityConfig {
         };
     }
 
-    @Bean
+//    @Bean
     public ReactiveUserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> userRepository.findByName(username)
                 .map(user -> User.withDefaultPasswordEncoder()
@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .build());
     }
 
-    @Bean
+//    @Bean
     public SecurityWebFilterChain myCustomSecurityPolicy(ServerHttpSecurity httpSecurity) {
         return httpSecurity
                 .authorizeExchange(exchangeSpec -> exchangeSpec

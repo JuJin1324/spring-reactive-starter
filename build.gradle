@@ -43,6 +43,10 @@ dependencies {
 //    implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-config'
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
+
     implementation ('org.springframework.boot:spring-boot-starter-hateoas') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
     }
