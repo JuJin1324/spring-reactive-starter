@@ -253,6 +253,68 @@
 ### 참조사이트
 > [Reactor map, flatMap method는 언제 써야할까?](https://luvstudy.tistory.com/95)  
 
+## Reactor publishOn vs subscribeOn
+### Scheduler
+> publishOn 혹은 subscribeOn 에서 스케줄러를 등록하여 블로킹 코드를 별도의 스레드에 할당해서 스레드 낭비를 방지할 수 있다.  
+> Scheduler 는 다음과 같다.  
+> Schedulers.immediate(): 현재 스레드  
+> Schedulers.single(): 재사용 가능한 하나의 스레드. 현재 수행 중인 리액터 플로우뿐만 아니라 호출되는 모든 작업이 동일한 하나의 스레드에서 실행된다.  
+> Schedulers.newSingle(): 새로 생성한 전용 스레드  
+> Schedulers.boundedElastic(): 작업량에 따라 스레드 숫자가 늘어나거나 줄어드는 신축성있는 스레드 풀  
+> Schedulers.parallel(): 병렬 작업에 적합하도록 최적화된 고정 크기 워커 스레드 풀  
+> Schedulers.fromExecutorService(): ExecutorService 인스턴스를 감싸서 재사용  
+> 
+> single(), newSingle, parallel() 은 논블로킹 작업에 사용되는 스레드를 생성한다. 이 세가지 스케줄러에 의해 생성되는 스레드는 리액터의 NonBlocking 
+> 인터페이스를 구현한다. 따라서 block(), blockFirst(), blockLast() 같은 블로킹 코드가 사용되면 IllegalStateException 이 발생한다.
+
+### publishOn
+> 호출되는 시점 이후로는 지정한 스케줄러를 사용한다. 이 방법을 사용하면 사용하는 스케줄러를 여러 번 바꿀 수도 있다.    
+
+### subscribeOn
+> 플로우 전 단계에 걸쳐 사용되는 스케줄러를 지정한다. 플로우 전체에 영향을 미치므로 `publishOn` 에 비해 영향 범위가 더 넓다.  
+> 리액터 플로우에서 `subscribeOn` 이 어디에 위치하든 해당 플로우 전체가 `subscribOn` 으로 지정한 스레드에서 실행된다. 다만 나중에 `publishOn` 으로
+> 스레드를 다시 지정하면, 지정한 지점 이후부터는 `publishOn` 으로 새로 지정한 스레드에서 리액터 플로우가 실행된다.
+
+## just vs defer vs fromCallable
+### just
+> 구독 이전에 just 선언 만으로 just 안의 내용을 인스턴스화 한다.  
+> ex) `Mono<Item> just = Mono.just(ItemService.getOne("item-1"));` 선언 시에 ItemService.getOne 메서드가 실행된다.  
+> 마치 Optional.orElse() 과 비슷하다.(eager)
+
+### defer
+> 구독이 발생해야 안의 내용을 실행하여 인스턴스화 한다.
+> ex) `Mono<Item> defer = Mono.defer(() -> Mono.just(ItemService.getOne("item-1"));` 선언이 되어도 defer 안의 내용은 실행되지 않고 
+> 구독이 발생해야 안의 내용이 실행된다.  
+> 마치 Optional.orElseGet() 과 비슷하다.(lazy)
+
+### fromCallable
+> defer 와 유사하다. defer 의 경우 내부 람다 함수에서 Mono 를 반환해야하지만 callable은 Mono 가 아닌 인스턴스를 반환할 수 있다.    
+> ex) `Mono<Item> callable = Mono.fromCallable(() -> ItemService.getOne("item-1"));`  
+> defer 와 마찬가지로 구독이 발생해야 안의 내용이 실행된다.(lazy)
+
+### boundedElastic + fromCallable
+> Schedulers.boundedElastic() + fromCallable() 을 사용하여 fromCallable 안에 블로킹 코드를 넣어두는 방식으로
+> 블로킹 코드를 논블로킹하게 구현할 수 있다.  
+> ex)
+> ```java
+> Mono
+>   .subscribeOn(Schedulers.boundedElastic())
+>   .fromCallable(() -> {
+>       return ...
+>   });
+> ```
+
+## doOnNext vs map
+### doOnNext
+> 한 개의 시퀀스가 전달 될 때마다 doOnNext 이벤트 발생, map 이 아님으로 return 하지 않으며 return 하지 않더라도 매개변수로 들어온 값을 그대로
+> 방출한다.
+
+### map
+> 매개변수를 다른 타입으로 변환하여 방출한다. 방출할 타입의 변수를 return 한다.
+
+### 참조사이트
+> [Reactor just, defer, fromCallable 에 대하여](https://binux.tistory.com/135?category=907689)
+
 ## Spring REST Doc
 ### Asciidoctor
 > API 문서화 도구
@@ -332,3 +394,50 @@
 
 ### Asciidoctor - Maven
 > 참조사이트: [Maven + MockMvc 환경에서 Spring Rest Docs 써보기](https://berrrrr.github.io/programming/2021/01/24/how-to-use-spring-rest-docs/)  
+
+## RabbitMQ 메시징 테스트
+### TestContainers
+> RabbitMQ 를 직접 설치하지 않고 도커 컨테이너를 이용해서 테스트 용도로 설치했다가 테스트가 완료되면 자동으로 제거될 수 있도록 해주는 라이브러리  
+>
+> Gradle  
+> build.gradle
+> ```groovy
+> dependencies {
+>   implementation 'org.springframework.boot:spring-boot-starter-amqp'  // SpringBoot RabbitMQ 라이브러리 
+>   ...
+>   implementation platform('org.testcontainers:testcontainers-bom:1.17.3') //import bom
+>   testImplementation 'org.testcontainers:junit-jupiter'
+>   testImplementation 'org.testcontainers:rabbitmq'    // TestContainer 로 다른 컨테이너가 필요하면 얘만 교체하면 된다.
+> }
+> ```
+
+### Serializable -> Jackson
+> 역직렬화가 자바에 포함돼 있는 여러 보안 검사를 우회한다는 것은 잘 알려져 있다. 즉 보안에 취약하다.  
+> Spring AMQP 의 경우 자바의 Serializable 인터페이스를 사용해서 직렬화를 처리할 수 있다. 메시지를 Serializable 처리하지 않고
+> Jackson 을 통한 JSON 으로 처리하도록 Bean 을 등록한다.  
+> ```java
+> @Bean
+> Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
+>     return new Jackson2JsonMessageConverter();
+> }
+> ```
+
+### log 확인
+> Reactor, RabbitMQ, Spring Data 가 어떻게 협업하는지 알고 싶다면 application.yml 에 다음과 같이 로깅 레벨을 지정한다.  
+> ```yaml
+> logging:
+>   level:
+>     org.springframework.amqp: debug
+>     org.springframework.messaging: debug
+>     org.springframework.data: debug
+>     reactor: debug
+> ```
+
+## 스프링 시큐리티
+### dependencies
+> build.gradle
+> ```groovy
+> implementation 'org.springframework.boot:spring-boot-starter-security'
+> testImplementation 'org.springframework.security:spring-security-test'
+> ```
+

@@ -8,6 +8,13 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: [google client id]
+            client-secret: [google client secret key]
 
 management:
   endpoint:
@@ -21,7 +28,6 @@ management:
   info:
     env:
       enabled: true
-
 info:
   project.version: '${version}'
   java.version: '${sourceCompatibility}'
@@ -35,6 +41,8 @@ spring:
 logging:
   level:
     root: info
-    web: debug
-    reactor.netty: debug
-    org.springframework.data.mongodb.core.ReactiveMongoTemplate: debug
+    web: info
+#    reactor: debug
+#    org.springframework.data: debug
+#    org.springframework.messaging: debug
+#    org.springframework.amqp: debug

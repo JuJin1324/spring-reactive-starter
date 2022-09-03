@@ -22,4 +22,9 @@ public class SpringReactiveStarterApplication {
     HttpTraceRepository traceRepository() {
         return new InMemoryHttpTraceRepository();
     }
+
+//    @Bean
+//    Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
+//        return new Jackson2JsonMessageConverter();
+//    }
 }
