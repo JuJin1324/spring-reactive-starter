@@ -1,28 +1,20 @@
 package starter.reactive;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import reactor.blockhound.BlockHound;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-import starter.reactive.domain.ecommerce.dto.CartReadDto;
 import starter.reactive.domain.ecommerce.entity.Cart;
-import starter.reactive.domain.ecommerce.entity.CartItem;
-import starter.reactive.domain.ecommerce.entity.Item;
 import starter.reactive.domain.ecommerce.repository.CartRepository;
 import starter.reactive.domain.ecommerce.repository.ItemRepository;
 import starter.reactive.domain.ecommerce.service.BlockingCartService;
 import starter.reactive.domain.ecommerce.service.CartService;
 
 import java.time.Duration;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -45,7 +37,7 @@ public class BlockHoundUnitTest {
         cartService = new BlockingCartService(cartRepository, itemRepository);
     }
 
-    @Test
+    //    @Test
     void threadSleepIsBlockingCall() {
         Mono.delay(Duration.ofSeconds(1))
                 .flatMap(tick -> {
@@ -64,7 +56,7 @@ public class BlockHoundUnitTest {
                 });
     }
 
-    @Test
+    //    @Test
     void blockHoundShouldTrapBlockingCall() {
 //        Item sampleItem = new Item("item1", "TV tray", "Alf TV tray", 19.99);
 //        CartItem sampleCartItem = new CartItem(sampleItem);
@@ -72,7 +64,7 @@ public class BlockHoundUnitTest {
 
         /* stubbing */
         given(cartRepository.findById(anyString()))
-                .willReturn(Mono.<Cart> empty().hide());
+                .willReturn(Mono.<Cart>empty().hide());
 //        given(itemRepository.findById(anyString()))
 //                .willReturn(Mono.just(sampleItem));
 //        given(cartRepository.save(any()))

@@ -74,6 +74,32 @@
 > )
 > ```
 
+### Functional Endpoint 에서 Web 레이어 단위 테스트
+> 기본 형태
+> ```java
+> @ActiveProfiles("test")
+> @WebFluxTest 
+> @AutoConfigureWebTestClient
+> @AutoConfigureRestDocs
+> @Import({TripHandler.class, TripRouters.class, AuthenticateWebFilter.class})
+> class TripHandlerTest {
+>     ... 
+> 
+>     @Autowired
+>     WebTestClient webTestClient;
+>       
+>     ...
+> }
+> ```
+> `@WebFluxTest`: Web 관련 컴포넌트만 (@Controller 애노테이션이 붙은 컴포넌트 및 WebConfig 등) 자동으로 빈으로 등록해준다.  
+> 이 프로젝트에서는 Functional Endpoint 를 사용해서 @Controller 가 없지만 Spring Container 를 띄우는 용도로 사용한다.
+>
+> `@AutoConfigureWebTestClient`: WebTestClient 사용 용도
+>
+> `@Import({TripHandler.class, TripRouters.class, AuthenticateWebFilter.class})`: Functional Endpoint 모델에서는
+> @Controller 가 없어서 `@WebFluxTest` 선언으로 위의 TripHandler, TripRouters, AuthenticateWebFilter 가 자동으로 빈으로 올라오지 않는다.
+> 그래서 직접 `@Import` 를 통해서 빈으로 올린다.
+
 ## Deploy
 ### 실행가능한 Jar 파일 생성
 > Gradle 
